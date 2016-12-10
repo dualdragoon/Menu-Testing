@@ -25,7 +25,7 @@ namespace Tower_Defense_Project
         static MouseManager mouseManager;
         static MouseState mouse;
 
-        string lastMenu = "Main Menu";
+        string lastMenu = "Menu";
         Texture2D background;
         Vector2 intendedResolution;
 
@@ -142,23 +142,23 @@ namespace Tower_Defense_Project
 
                 foreach (XmlNode i in node)
                 {
-                    if (i.Name == "BackgroundTexture") background = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
+                    if (i.Name == "BackgroundTexture") background = GameContent.Load<Texture2D>("Menus/" + menuName + "/" + i.InnerText + ".png");
                     else if (i.Name == "Texture")
                     {
                         foreach (XmlNode l in i)
                         {
-                            if (l.Name == "TextureName") textures.Add(Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png"));
+                            if (l.Name == "TextureName") textures.Add(GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png"));
                             else if (l.Name == "Position")
                             {
                                 XmlNode x = l.SelectSingleNode("X"), y = l.SelectSingleNode("Y");
-                                textureLocations.Add(new Vector2((float.Parse(x.InnerText) / intendedResolution.X) * Main.Scale.X, (float.Parse(y.InnerText) / intendedResolution.Y) * Main.Scale.Y));
+                                textureLocations.Add(new Vector2((float.Parse(x.InnerText) / intendedResolution.X) * Scale.X, (float.Parse(y.InnerText) / intendedResolution.Y) * Scale.Y));
                             }
                         }
                     }
                     else if (i.Name == "Button")
                     {
                         ButtonType b = ButtonType.Ellipse;
-                        Texture2D normal = Main.GameContent.Load<Texture2D>("Textures/help"), hovered = Main.GameContent.Load<Texture2D>("Textures/help");
+                        Texture2D normal = GameContent.Load<Texture2D>("Textures/help"), hovered = GameContent.Load<Texture2D>("Textures/help");
                         Vector2 pos = Vector2.Zero;
                         float w = 0, h = 0, diameter = 0;
                         int leftResultType = 0, rightResultType = 0;
@@ -169,8 +169,8 @@ namespace Tower_Defense_Project
                                 b = (ButtonType)int.Parse(l.InnerText);
                                 buttonTypes.Add(b);
                             }
-                            else if (l.Name == "NormalTexture") normal = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
-                            else if (l.Name == "HoveredTexture") hovered = Main.GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
+                            else if (l.Name == "NormalTexture") normal = GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
+                            else if (l.Name == "HoveredTexture") hovered = GameContent.Load<Texture2D>("Menus/" + menuName + "/" + l.InnerText + ".png");
                             else if (l.Name == "Position")
                             {
                                 XmlNode x = l.SelectSingleNode("X"), y = l.SelectSingleNode("Y");
@@ -195,8 +195,8 @@ namespace Tower_Defense_Project
                                 if (l.Name == "Size")
                                 {
                                     XmlNode width = l.SelectSingleNode("Width"), height = l.SelectSingleNode("Height");
-                                    w = (float.Parse(width.InnerText) / intendedResolution.X) * Main.Scale.X;
-                                    h = (float.Parse(height.InnerText) / intendedResolution.Y) * Main.Scale.Y;
+                                    w = (float.Parse(width.InnerText) / intendedResolution.X) * Scale.X;
+                                    h = (float.Parse(height.InnerText) / intendedResolution.Y) * Scale.Y;
                                 }
                             }
                             else if (b == ButtonType.Circle)
@@ -204,10 +204,10 @@ namespace Tower_Defense_Project
                                 if (l.Name == "Diameter") diameter = float.Parse(l.InnerText);
                             }
                         }
-                        pos = new Vector2((pos.X / intendedResolution.X) * Main.Scale.X, (pos.Y / intendedResolution.Y) * Main.Scale.Y);
-                        if (b == ButtonType.Rectangle) buttons.Add(new Button(pos, (int)w, (int)h, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
-                        else if (b == ButtonType.Circle) buttons.Add(new Button(pos, diameter, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
-                        else if (b == ButtonType.Ellipse) buttons.Add(new Button(pos, buttons.Count, Main.CurrentMouse, normal, hovered, true, Main.Scale.X, Main.Scale.Y));
+                        pos = new Vector2((pos.X / intendedResolution.X) * Scale.X, (pos.Y / intendedResolution.Y) * Scale.Y);
+                        if (b == ButtonType.Rectangle) buttons.Add(new Button(pos, (int)w, (int)h, buttons.Count, CurrentMouse, normal, hovered, true, Scale.X, Scale.Y));
+                        else if (b == ButtonType.Circle) buttons.Add(new Button(pos, diameter, buttons.Count, CurrentMouse, normal, hovered, true, Scale.X, Scale.Y));
+                        else if (b == ButtonType.Ellipse) buttons.Add(new Button(pos, buttons.Count, CurrentMouse, normal, hovered, true, Scale.X, Scale.Y));
                     }
                 }
 
@@ -219,7 +219,7 @@ namespace Tower_Defense_Project
                         i.LeftClicked += (object sender, EventArgs e) =>
                         {
                             string name = buttonLeftDestinations[((Button)sender).ButtonNum];
-                            background = Main.GameContent.Load<Texture2D>("Textures/help");
+                            background = GameContent.Load<Texture2D>("Textures/help");
                             Clear();
                             lastMenu = menuName;
                             LoadMenu(name);
@@ -255,7 +255,7 @@ namespace Tower_Defense_Project
                         i.RightClicked += (object sender, EventArgs e) =>
                         {
                             string name = buttonRightDestinations[((Button)sender).ButtonNum];
-                            background = Main.GameContent.Load<Texture2D>("Textures/help");
+                            background = GameContent.Load<Texture2D>("Textures/help");
                             Clear();
                             lastMenu = menuName;
                             LoadMenu(name);
@@ -315,20 +315,16 @@ namespace Tower_Defense_Project
 
             try
             {
-                foreach (Button i in buttons) i.Update(Main.CurrentMouse);
+                foreach (Button i in buttons) i.Update(CurrentMouse);
             }
             catch { }
 
-            /*if (Main.CurrentKeyboard.IsKeyPressed(Keys.Enter))
+            if (CurrentKeyboard.IsKeyPressed(Keys.Enter))
             {
-                background = Main.GameContent.Load<Texture2D>("Textures/help");
-                buttons.Clear();
-                buttonDestinations.Clear();
-                textures.Clear();
-                textureLocations.Clear();
-                buttonResults.Clear();
+                background = GameContent.Load<Texture2D>("Textures/help");
+                Clear();
                 LoadMenu("Menu");
-            }*/
+            }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -337,7 +333,7 @@ namespace Tower_Defense_Project
 
             for (int i = 0; i < textures.Count; i++)
             {
-                Vector2 textureSize = new Vector2((textures[i].Width / intendedResolution.X) * Main.Scale.X, (textures[i].Height / intendedResolution.Y) * Main.Scale.Y),
+                Vector2 textureSize = new Vector2((textures[i].Width / intendedResolution.X) * Scale.X, (textures[i].Height / intendedResolution.Y) * Scale.Y),
                     textureLocation = textureLocations[i];
                 spriteBatch.Draw(textures[i], new RectangleF(textureLocation.X, textureLocation.Y, textureSize.X, textureSize.Y), Color.White);
             }
