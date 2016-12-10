@@ -325,10 +325,18 @@ namespace Tower_Defense_Project
                 Clear();
                 LoadMenu("Menu");
             }
+
+            base.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, graphics.GraphicsDevice.BlendStates.NonPremultiplied);
+
+            Window.AllowUserResizing = false;
+
             spriteBatch.Draw(background, Vector2.Zero, Color.White);
 
             for (int i = 0; i < textures.Count; i++)
@@ -349,6 +357,10 @@ namespace Tower_Defense_Project
                     spriteBatch.Draw(i.Texture, i.Position, Color.White);
                 }
             }
+
+            spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }
